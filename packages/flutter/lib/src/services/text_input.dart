@@ -4,7 +4,7 @@
 
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'dart:ui' show TextAffinity, hashValues;
+import 'dart:ui' show TextAffinity, hashValues, Offset;
 
 import 'package:flutter/foundation.dart';
 
@@ -451,7 +451,8 @@ class TextEditingValue {
   const TextEditingValue({
     this.text = '',
     this.selection = const TextSelection.collapsed(offset: -1),
-    this.composing = TextRange.empty
+    this.composing = TextRange.empty,
+    this.cursorPosition
   }) : assert(text != null),
        assert(selection != null),
        assert(composing != null);
@@ -470,6 +471,10 @@ class TextEditingValue {
         start: encoded['composingBase'] ?? -1,
         end: encoded['composingExtent'] ?? -1,
       ),
+      cursorPosition: Offset(
+        dx: encoded['cursorX'] ?? 0.0,
+        dy: encoded['cursorY'] ?? 0.0,
+      ),
     );
   }
 
@@ -483,6 +488,8 @@ class TextEditingValue {
       'selectionIsDirectional': selection.isDirectional,
       'composingBase': composing.start,
       'composingExtent': composing.end,
+      'cursorX': cursorPosition.x,
+      'cursorY': cursorPosition.y,
     };
   }
 
@@ -494,6 +501,9 @@ class TextEditingValue {
 
   /// The range of text that is still being composed.
   final TextRange composing;
+  
+  /// The position of the user's cursor.
+  final Offset cursorPosition;
 
   /// A value that corresponds to the empty string with no selection and no composing range.
   static const TextEditingValue empty = TextEditingValue();
@@ -502,17 +512,19 @@ class TextEditingValue {
   TextEditingValue copyWith({
     String text,
     TextSelection selection,
-    TextRange composing
+    TextRange composing,
+    Offset cursorPosition
   }) {
     return TextEditingValue(
       text: text ?? this.text,
       selection: selection ?? this.selection,
-      composing: composing ?? this.composing
+      composing: composing ?? this.composing,
+      cursorPosition: cursorPosition ?? this.cursorPosition
     );
   }
 
   @override
-  String toString() => '$runtimeType(text: \u2524$text\u251C, selection: $selection, composing: $composing)';
+  String toString() => '$runtimeType(text: \u2524$text\u251C, selection: $selection, composing: $composing, cursorPosition: $cursorPosition)';
 
   @override
   bool operator ==(dynamic other) {
@@ -523,14 +535,16 @@ class TextEditingValue {
     final TextEditingValue typedOther = other;
     return typedOther.text == text
         && typedOther.selection == selection
-        && typedOther.composing == composing;
+        && typedOther.composing == composing
+        && typedOther.cursorPosition == cursorPosition;
   }
 
   @override
   int get hashCode => hashValues(
     text.hashCode,
     selection.hashCode,
-    composing.hashCode
+    composing.hashCode,
+    cursorPosition.hashCode
   );
 }
 
