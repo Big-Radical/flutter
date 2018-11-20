@@ -544,7 +544,7 @@ class TextEditingValue {
     text.hashCode,
     selection.hashCode,
     composing.hashCode,
-    cursorPosition.hashCode
+    cursorPosition?.hashCode ?? 0
   );
 }
 
