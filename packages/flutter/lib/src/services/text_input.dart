@@ -472,8 +472,8 @@ class TextEditingValue {
         end: encoded['composingExtent'] ?? -1,
       ),
       cursorPosition: Offset(
-        dx: encoded['cursorX'] ?? 0.0,
-        dy: encoded['cursorY'] ?? 0.0,
+        encoded['cursorX'] ?? 0.0,
+        encoded['cursorY'] ?? 0.0,
       ),
     );
   }
@@ -488,8 +488,8 @@ class TextEditingValue {
       'selectionIsDirectional': selection.isDirectional,
       'composingBase': composing.start,
       'composingExtent': composing.end,
-      'cursorX': cursorPosition.x,
-      'cursorY': cursorPosition.y,
+      'cursorX': cursorPosition?.dx ?? 0.0,
+      'cursorY': cursorPosition?.dy ?? 0.0,
     };
   }
 
