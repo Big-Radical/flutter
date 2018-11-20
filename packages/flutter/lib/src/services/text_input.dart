@@ -452,7 +452,7 @@ class TextEditingValue {
     this.text = '',
     this.selection = const TextSelection.collapsed(offset: -1),
     this.composing = TextRange.empty,
-    this.cursorPosition
+    this.cursorPosition = Offset.zero
   }) : assert(text != null),
        assert(selection != null),
        assert(composing != null);
@@ -472,8 +472,8 @@ class TextEditingValue {
         end: encoded['composingExtent'] ?? -1,
       ),
       cursorPosition: Offset(
-        encoded['cursorX'] ?? 0.0,
-        encoded['cursorY'] ?? 0.0,
+        encoded['cursorX']?.toDouble() ?? 0.0,
+        encoded['cursorY']?.toDouble() ?? 0.0,
       ),
     );
   }
